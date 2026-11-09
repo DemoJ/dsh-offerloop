@@ -10,7 +10,7 @@ window.__ModuleLoader__.load({
   factory(require) {
     const React = require('react')
     const h = React.createElement
-    const { useState, useEffect, useCallback } = React
+    const { useState, useEffect, useCallback, useRef } = React
 
     const STAGES = { lead: '线索', applied: '已投递', screen: '沟通中', interview: '面试中', offer: 'Offer', closed: '已关闭' }
     const ROUNDS = ['一面', '二面', '三面', 'HR 面', '笔试', '终面', '业务面', '专业面', '压力面', '其他']
@@ -27,18 +27,30 @@ window.__ModuleLoader__.load({
 .olp-btn{border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary);border-radius:8px;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
 .olp-btn:hover{border-color:var(--dsw-alias-border-l2)}
 .olp-btn:disabled{opacity:.55;cursor:default}
-.olp-btn.pri{background:var(--dsw-alias-brand-primary);border-color:var(--dsw-alias-brand-primary);color:#fff}
+.olp-btn.pri{background:var(--dsw-alias-brand-primary);border-color:var(--dsw-alias-brand-primary);color:var(--dsw-alias-bg-base);font-weight:600}
+.olp-btn.pri:hover{filter:brightness(.94)}
+.olp-btn.pri:disabled{opacity:1;background:var(--dsw-alias-bg-layer-2);border-color:var(--dsw-alias-border-l1);color:var(--dsw-alias-label-secondary);font-weight:400}
 .olp-btn.quiet{background:transparent;border-color:transparent;color:var(--dsw-alias-label-secondary)}
 .olp-btn.quiet:hover{color:var(--dsw-alias-label-primary);border-color:var(--dsw-alias-border-l1)}
 .olp-card{background:var(--dsw-alias-bg-layer-1);border:1px solid var(--dsw-alias-border-l1);border-radius:12px;padding:14px 16px}
-.olp-target{display:flex;gap:14px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;border:1px solid var(--dsw-alias-border-l1);border-left:3px solid var(--dsw-alias-brand-primary);border-radius:12px;background:var(--dsw-alias-bg-layer-1);padding:12px 16px;margin-bottom:16px}
-.olp-target-main{min-width:0;flex:1}
-.olp-target h2{font-size:15px;margin:0 0 2px}
-.olp-target .olp-sub{font-size:12px;color:var(--dsw-alias-label-secondary)}
-.olp-target .olp-jd{margin-top:6px;font-size:12.5px;color:var(--dsw-alias-label-secondary);max-height:54px;overflow:hidden;white-space:pre-wrap}
-.olp-tabs{display:flex;gap:4px;border-bottom:1px solid var(--dsw-alias-border-l1);margin:0 0 16px;flex-wrap:wrap}
-.olp-tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--dsw-alias-label-secondary);padding:8px 12px;font:inherit;font-size:13.5px;cursor:pointer;margin-bottom:-1px}
-.olp-tab.on{color:var(--dsw-alias-label-primary);border-bottom-color:var(--dsw-alias-brand-primary);font-weight:600}
+.olp-tabrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px}
+.olp-tabs{display:flex;gap:2px;flex-wrap:wrap;background:var(--dsw-alias-bg-layer-1);border:1px solid var(--dsw-alias-border-l1);border-radius:10px;padding:3px}
+.olp-tab{background:none;border:none;border-radius:7px;color:var(--dsw-alias-label-secondary);padding:5px 12px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+.olp-tab:hover{color:var(--dsw-alias-label-primary)}
+.olp-tab.on{background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary);font-weight:600}
+.olp-tchip{margin-left:auto;display:inline-flex;align-items:center;gap:8px;max-width:min(440px,100%);min-width:0;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-1);border-radius:999px;padding:5px 12px;font:inherit;font-size:12px;color:var(--dsw-alias-label-primary);cursor:pointer;text-align:left}
+.olp-tchip:hover{border-color:var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-2)}
+.olp-tchip.empty{border-style:dashed}
+.olp-tchip.open{border-color:var(--dsw-alias-brand-primary)}
+.olp-tchip-label{color:var(--dsw-alias-label-secondary);font-size:11.5px;white-space:nowrap}
+.olp-tchip-value{font-weight:600;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.olp-tchip.empty .olp-tchip-value{font-weight:500;color:var(--dsw-alias-label-secondary)}
+.olp-tchip-edit{flex:0 0 auto;font-size:11.5px;color:var(--dsw-alias-label-secondary);border-left:1px solid var(--dsw-alias-border-l1);padding-left:8px;white-space:nowrap}
+.olp-tchip:hover .olp-tchip-edit{color:var(--dsw-alias-label-primary)}
+.olp-teditor{margin:0 0 16px}
+.olp-teditor-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.olp-teditor-title{font-size:15px;margin:0 0 2px}
+.olp-teditor-head .olp-hint{margin:0}
 .olp-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
 .olp-stat{border:1px solid var(--dsw-alias-border-l1);border-radius:12px;background:var(--dsw-alias-bg-layer-1);padding:10px 12px}
 .olp-stat b{display:block;font-size:22px;line-height:1.2}
@@ -81,8 +93,50 @@ window.__ModuleLoader__.load({
 .olp-q .a{font-size:12px;color:var(--dsw-alias-label-secondary);white-space:pre-wrap}
 .olp-q .c{font-size:12px;color:var(--dsw-alias-label-secondary)}
 .olp-ctx{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--dsw-alias-label-secondary);margin-bottom:10px}
+.olp-dirlabel{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--dsw-alias-label-secondary);white-space:nowrap}
+.olp-file{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--dsw-alias-label-secondary);margin:2px 0 0;min-width:0}
+.olp-file b{color:var(--dsw-alias-label-primary);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.olp-pickpage{display:flex;flex-direction:column;gap:12px;padding:16px 18px}
+.olp-pick-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.olp-pick-title{font-size:16px;margin:0 0 2px;letter-spacing:-.01em}
+.olp-pick-head .olp-hint{margin:0}
+.olp-pick-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.olp-pick-crumbs{display:flex;align-items:center;gap:2px;flex-wrap:wrap;font-size:12px;min-width:0}
+.olp-pick-crumb-wrap{display:inline-flex;align-items:center;gap:2px;min-width:0}
+.olp-pick-sep{color:var(--dsw-alias-label-secondary);font-size:11px}
+.olp-pick-crumb{border:1px solid transparent;background:none;color:var(--dsw-alias-label-secondary);font:inherit;font-size:12px;cursor:pointer;padding:2px 6px;border-radius:6px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.olp-pick-crumb:hover{background:var(--dsw-alias-bg-layer-2);color:var(--dsw-alias-label-primary);border-color:var(--dsw-alias-border-l1)}
+.olp-pick-crumb.last{color:var(--dsw-alias-label-primary);font-weight:600}
+.olp-pick-search{margin-left:auto;width:220px;max-width:100%;background:var(--dsw-alias-bg-layer-2);border:1px solid var(--dsw-alias-border-l1);border-radius:8px;padding:5px 10px;color:var(--dsw-alias-label-primary);font:inherit;font-size:12.5px}
+.olp-pick-search:focus{outline:1px solid var(--dsw-alias-brand-primary);border-color:var(--dsw-alias-brand-primary)}
+.olp-pick-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--dsw-alias-label-secondary)}
+.olp-check{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--dsw-alias-label-secondary);cursor:pointer}
+.olp-pick-list{max-height:min(52vh,460px);overflow:auto;display:flex;flex-direction:column;gap:1px;padding:4px 2px;border-top:1px solid var(--dsw-alias-border-l1);border-bottom:1px solid var(--dsw-alias-border-l1)}
+.olp-pick-row{display:flex;align-items:center;gap:8px;width:100%;padding:7px 8px;border:1px solid transparent;border-radius:7px;background:none;color:var(--dsw-alias-label-primary);font:inherit;font-size:13px;line-height:1.45;text-align:left;cursor:pointer}
+.olp-pick-row:hover{background:var(--dsw-alias-bg-layer-1);border-color:var(--dsw-alias-border-l1)}
+.olp-pick-row.on{background:var(--dsw-alias-bg-layer-1);border-color:var(--dsw-alias-brand-primary)}
+.olp-pick-ico{flex:0 0 auto;font-size:14px;line-height:1}
+.olp-pick-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.olp-pick-tag{margin-left:auto;flex:0 0 auto;font-size:10.5px;letter-spacing:.02em;color:var(--dsw-alias-label-secondary);border:1px solid var(--dsw-alias-border-l1);border-radius:999px;padding:0 7px}
+.olp-pick-tag.on{color:var(--dsw-alias-bg-base);background:var(--dsw-alias-brand-primary);border-color:var(--dsw-alias-brand-primary);font-weight:600}
+.olp-pick-empty{padding:26px 12px;text-align:center;font-size:12.5px;color:var(--dsw-alias-label-secondary)}
+.olp-pick-foot{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.olp-pick-sel{flex:1;min-width:0;font-size:12px;color:var(--dsw-alias-label-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.olp-pick-sel.set{color:var(--dsw-alias-label-primary)}
+.olp-file-name{max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:bottom}
 @media (max-width:820px){.olp-wrap{padding:14px 14px 48px}.olp-form{grid-template-columns:1fr}}
 `
+
+    const splitPath = (value) => String(value || '').split('/').filter(Boolean)
+    const baseNameOf = (value) => {
+      const parts = splitPath(value)
+      return parts.length > 0 ? parts[parts.length - 1] : ''
+    }
+    const dirNameOf = (value) => {
+      const parts = splitPath(value)
+      parts.pop()
+      return parts.join('/')
+    }
 
     function Icon(props) {
       const size = props.size || 20
@@ -136,73 +190,90 @@ window.__ModuleLoader__.load({
       return h('label', { className: 'olp-field' + (props.wide ? ' wide' : '') }, h('span', null, props.label), props.children)
     }
 
-    function TargetCard(props) {
-      const { target, busy, onSave, onClear, onOpenChat } = props
-      const [editing, setEditing] = useState(!target)
+    function TargetChip(props) {
+      const { target, open, onToggle } = props
+      const value = target ? target.title + (target.company ? ' @ ' + target.company : '') : '未设置'
+      return h(
+        'button',
+        {
+          className: 'olp-tchip' + (target ? '' : ' empty') + (open ? ' open' : ''),
+          title: target ? value + ' · 点击编辑' : '还没有目标岗位；点一下设置，模拟面试才有针对性',
+          onClick: onToggle,
+        },
+        h('span', { className: 'olp-tchip-label' }, '目标岗位'),
+        h('span', { className: 'olp-tchip-value' }, value),
+        h('span', { className: 'olp-tchip-edit' }, open ? '收起' : target ? '编辑' : '设置'),
+      )
+    }
+
+    function TargetEditor(props) {
+      const { target, busy, onSave, onClear, onOpenChat, onClose } = props
       const [title, setTitle] = useState(target ? target.title : '')
       const [company, setCompany] = useState(target ? target.company : '')
       const [jd, setJd] = useState(target ? target.jd : '')
-
-      useEffect(() => {
-        setTitle(target ? target.title : '')
-        setCompany(target ? target.company : '')
-        setJd(target ? target.jd : '')
-        if (!target) setEditing(true)
-      }, [target && target.id, target && target.updatedAt])
-
-      if (!editing && target) {
-        return h(
-          'section',
-          { className: 'olp-target' },
-          h(
-            'div',
-            { className: 'olp-target-main' },
-            h('h2', null, target.title),
-            h('div', { className: 'olp-sub' }, [target.company || '未填公司', '目标岗位变量 · ' + (target.source === 'image' ? 'JD 截图' : '文字 / JD')].join(' · ')),
-            target.jd ? h('div', { className: 'olp-jd' }, target.jd) : null,
-          ),
-          h(
-            'div',
-            { className: 'olp-row' },
-            h('button', { className: 'olp-btn', onClick: () => setEditing(true) }, '编辑目标'),
-            h('button', { className: 'olp-btn quiet', onClick: onClear, disabled: busy }, '清除'),
-            h('button', { className: 'olp-btn pri', onClick: () => onOpenChat('这是当前目标岗位：' + target.title + (target.company ? ' @ ' + target.company : '') + '。请先 offerloop_read 读取目标岗位 JD 和我的简历版本，然后给我一份「这个岗位最可能问什么」的预测清单，并问我是否要直接改简历。') }, '用对话处理'),
-          ),
-        )
+      const canSave = title.trim() !== '' || jd.trim() !== ''
+      async function save() {
+        if (!canSave) return
+        const ok = await onSave({ title: title.trim(), company: company.trim(), jd: jd.trim(), source: 'text' })
+        if (ok !== false) onClose()
       }
-
       return h(
         'section',
-        { className: 'olp-target' },
+        { className: 'olp-card olp-teditor' },
         h(
           'div',
-          { className: 'olp-target-main' },
-          h('h2', null, target ? '编辑目标岗位' : '设置目标岗位（变量）'),
-          h('div', { className: 'olp-sub' }, '文字粘贴 JD，或点右侧「用截图设置」把 JD 截图发给助手解析。'),
+          { className: 'olp-teditor-head' },
           h(
             'div',
-            { className: 'olp-form', style: { marginTop: '10px', marginBottom: '0' } },
-            h(Field, { label: '岗位标题' }, h('input', { className: 'olp-in', value: title, placeholder: '如：AI 产品经理', onChange: (e) => setTitle(e.target.value) })),
-            h(Field, { label: '公司' }, h('input', { className: 'olp-in', value: company, placeholder: '如：某科技公司', onChange: (e) => setCompany(e.target.value) })),
-            h(Field, { label: 'JD 原文 / 关键要求', wide: true }, h('textarea', { className: 'olp-ta', value: jd, placeholder: '把 JD 文字贴进来，或只写关键要求；之后可以随时改。', onChange: (e) => setJd(e.target.value) })),
+            null,
+            h('h2', { className: 'olp-teditor-title' }, target ? '编辑目标岗位' : '设置目标岗位'),
+            h('p', { className: 'olp-hint' }, '目标岗位是模拟面试和简历定制的主线：粘贴 JD 文字，或把 JD 截图发给助手解析。'),
+          ),
+          h('button', { className: 'olp-btn quiet', onClick: onClose }, '收起'),
+        ),
+        h(
+          'div',
+          { className: 'olp-form' },
+          h(Field, { label: '岗位标题' }, h('input', { className: 'olp-in', value: title, placeholder: '如：AI 产品经理', onChange: (e) => setTitle(e.target.value) })),
+          h(Field, { label: '公司' }, h('input', { className: 'olp-in', value: company, placeholder: '如：某科技公司', onChange: (e) => setCompany(e.target.value) })),
+          h(Field, { label: 'JD 原文 / 关键要求', wide: true }, h('textarea', { className: 'olp-ta', value: jd, placeholder: '把 JD 文字贴进来，或只写关键要求；之后可以随时改。', onChange: (e) => setJd(e.target.value) })),
+          h(
+            'div',
+            { className: 'olp-row', style: { gridColumn: '1/-1' } },
+            h('button', { className: 'olp-btn pri', disabled: busy || !canSave, onClick: save }, '保存目标岗位'),
             h(
-              'div',
-              { className: 'olp-row', style: { gridColumn: '1/-1' } },
-              h(
-                'button',
-                {
-                  className: 'olp-btn pri',
-                  disabled: busy || (title.trim() === '' && jd.trim() === ''),
-                  onClick: async () => {
-                    await onSave({ title: title.trim(), company: company.trim(), jd: jd.trim(), source: 'text' })
-                    setEditing(false)
-                  },
-                },
-                '保存为目标岗位',
-              ),
-              h('button', { className: 'olp-btn', onClick: () => onOpenChat('我要用一张 JD 截图设置目标岗位。请先让我粘贴图片，然后读取图片里的岗位标题、公司、关键要求与面试考点，提取成结构化信息后用 offerloop_write 的 target.set 保存（source 记为 image）。') }, '用截图设置'),
-              target ? h('button', { className: 'olp-btn quiet', onClick: () => setEditing(false) }, '取消') : null,
+              'button',
+              { className: 'olp-btn', onClick: () => onOpenChat('我要用一张 JD 截图设置目标岗位。请先让我粘贴图片，然后读取图片里的岗位标题、公司、关键要求与面试考点，提取成结构化信息后用 offerloop_write 的 target.set 保存（source 记为 image）。') },
+              '用截图设置',
             ),
+            target
+              ? h(
+                  'button',
+                  {
+                    className: 'olp-btn',
+                    onClick: () => {
+                      onOpenChat('这是当前目标岗位：' + target.title + (target.company ? ' @ ' + target.company : '') + '。请先 offerloop_read 读取目标岗位 JD 和我的简历版本，然后给我一份「这个岗位最可能问什么」的预测清单，并问我是否要直接改简历。')
+                      onClose()
+                    },
+                  },
+                  '用对话分析这个岗位',
+                )
+              : null,
+            target
+              ? h(
+                  'button',
+                  {
+                    className: 'olp-btn quiet',
+                    style: { marginLeft: 'auto' },
+                    disabled: busy,
+                    onClick: () => {
+                      onClear()
+                      onClose()
+                    },
+                  },
+                  '清除目标',
+                )
+              : null,
           ),
         ),
       )
@@ -272,7 +343,7 @@ window.__ModuleLoader__.load({
               h('button', { className: 'olp-btn', onClick: () => go('mock') }, '来一场模拟面试'),
               h('button', { className: 'olp-btn', onClick: () => go('review') }, '复盘一次真实面试'),
             ),
-            h('p', { className: 'olp-hint' }, state.target ? '当前目标：' + state.target.title + (state.target.company ? ' @ ' + state.target.company : '') : '还没有目标岗位。先在顶栏设一个，模拟面试才有针对性的 JD。'),
+            h('p', { className: 'olp-hint' }, state.target ? '当前目标：' + state.target.title + (state.target.company ? ' @ ' + state.target.company : '') : '还没有目标岗位。点上方「目标岗位」设置一下，模拟面试才有针对性的 JD。'),
           ),
           h(TodoList, { todos: state.todos, busy, run }),
           h(
@@ -280,8 +351,8 @@ window.__ModuleLoader__.load({
             { className: 'olp-card' },
             h('p', { className: 'olp-sec-title' }, '主线'),
             h('p', { className: 'olp-hint' }, '目标 JD → 简历版本 → 模拟面试（随机题 + 打分）→ 真实面试 → 复盘回写。'),
-            h('p', { className: 'olp-hint' }, '数据保存在当前 workspace 的 .offerloop.json；助手用 offerloop_read / offerloop_write 读写。'),
-            h('p', { className: 'olp-hint' }, '当前 workspace：' + (props.workspace ? props.workspace.title : '默认') + ' · ' + (props.workspace ? props.workspace.path : '')),
+            h('p', { className: 'olp-hint' }, '数据目录就是右上角选的文件夹：目标岗位、简历版本、面试记录、复盘都写在其中的 .offerloop.json；换一个文件夹就是另一套数据。'),
+            h('p', { className: 'olp-hint' }, '当前数据目录：' + (props.workspace ? props.workspace.title + ' · ' + props.workspace.path : '未选择')),
           ),
         ),
       )
@@ -292,34 +363,50 @@ window.__ModuleLoader__.load({
       const [title, setTitle] = useState('')
       const [company, setCompany] = useState('')
       const [jd, setJd] = useState('')
+      const [creating, setCreating] = useState(false)
       async function add() {
         if (title.trim() === '') return
-        await run('job.add', { title: title.trim(), company: company.trim(), jd: jd.trim(), source: 'panel' })
-        setTitle('')
-        setCompany('')
-        setJd('')
+        const ok = await run('job.add', { title: title.trim(), company: company.trim(), jd: jd.trim(), source: 'panel' })
+        if (ok !== false) {
+          setTitle('')
+          setCompany('')
+          setJd('')
+          setCreating(false)
+        }
       }
       return h(
         'div',
         null,
-        h(
-          'div',
-          { className: 'olp-card', style: { marginBottom: '14px' } },
-          h('p', { className: 'olp-sec-title' }, '新增岗位（投递看板）'),
-          h(
-            'div',
-            { className: 'olp-form' },
-            h(Field, { label: '岗位标题' }, h('input', { className: 'olp-in', value: title, placeholder: '如：AI 产品经理', onChange: (e) => setTitle(e.target.value) })),
-            h(Field, { label: '公司' }, h('input', { className: 'olp-in', value: company, placeholder: '公司名', onChange: (e) => setCompany(e.target.value) })),
-            h(Field, { label: 'JD 摘要（可留空）', wide: true }, h('textarea', { className: 'olp-ta', value: jd, onChange: (e) => setJd(e.target.value) })),
-            h(
+        creating
+          ? h(
               'div',
-              { className: 'olp-row', style: { gridColumn: '1/-1' } },
-              h('button', { className: 'olp-btn pri', onClick: add, disabled: busy || title.trim() === '' }, '加入岗位库'),
-              h('button', { className: 'olp-btn', onClick: () => openChat('请分析一份 JD：我会粘贴文字或发截图。提取硬性要求、加分项、关键词和面试考点，最后把岗位用 offerloop_write 的 job.add 保存。') }, '用对话解析 JD'),
+              { className: 'olp-card', style: { marginBottom: '14px' } },
+              h(
+                'div',
+                { className: 'olp-row', style: { justifyContent: 'space-between' } },
+                h('p', { className: 'olp-sec-title', style: { margin: 0 } }, '新增岗位'),
+                h('button', { className: 'olp-btn quiet', onClick: () => setCreating(false) }, '取消'),
+              ),
+              h(
+                'div',
+                { className: 'olp-form', style: { marginTop: '10px' } },
+                h(Field, { label: '岗位标题' }, h('input', { className: 'olp-in', value: title, placeholder: '如：AI 产品经理', onChange: (e) => setTitle(e.target.value) })),
+                h(Field, { label: '公司' }, h('input', { className: 'olp-in', value: company, placeholder: '公司名', onChange: (e) => setCompany(e.target.value) })),
+                h(Field, { label: 'JD 摘要（可留空）', wide: true }, h('textarea', { className: 'olp-ta', value: jd, onChange: (e) => setJd(e.target.value) })),
+                h(
+                  'div',
+                  { className: 'olp-row', style: { gridColumn: '1/-1' } },
+                  h('button', { className: 'olp-btn pri', onClick: add, disabled: busy || title.trim() === '' }, '加入岗位库'),
+                  h('button', { className: 'olp-btn', onClick: () => openChat('请分析一份 JD：我会粘贴文字或发截图。提取硬性要求、加分项、关键词和面试考点，最后把岗位用 offerloop_write 的 job.add 保存。') }, '用对话解析 JD'),
+                ),
+              ),
+            )
+          : h(
+              'div',
+              { className: 'olp-row', style: { marginBottom: '14px' } },
+              h('button', { className: 'olp-btn', onClick: () => setCreating(true) }, '＋ 新增岗位'),
+              h('span', { className: 'olp-hint' }, '投递看板：岗位 + 投递阶段；任意岗位都能「设为目标」。'),
             ),
-          ),
-        ),
         state.jobs.length === 0
           ? h('div', { className: 'olp-empty' }, '还没有岗位。先加一个，或把 JD 发给助手解析。')
           : h(
@@ -348,15 +435,160 @@ window.__ModuleLoader__.load({
       )
     }
 
+    function FilePicker(props) {
+      const { workspace, version, initialDir, busy, onPick, onClose } = props
+      const [dir, setDir] = useState(initialDir || '')
+      const [entries, setEntries] = useState(null)
+      const [error, setError] = useState('')
+      const [selected, setSelected] = useState('')
+      const [resumeOnly, setResumeOnly] = useState(true)
+      const [query, setQuery] = useState('')
+      const wsId = workspace ? workspace.id : ''
+      const versionLabel = version ? version.id + '「' + version.title + '」' : '当前版本'
+      const anchorRef = useRef(null)
+
+      useEffect(() => {
+        const node = anchorRef.current
+        if (node && typeof node.scrollIntoView === 'function') node.scrollIntoView({ block: 'start', inline: 'nearest' })
+      }, [])
+
+      const load = useCallback(
+        async (nextDir) => {
+          setError('')
+          setEntries(null)
+          setSelected('')
+          setQuery('')
+          try {
+            const response = await fetch('/offerloop/api/files?ws=' + encodeURIComponent(wsId) + '&dir=' + encodeURIComponent(nextDir || ''), { headers: { accept: 'application/json' } })
+            const data = await response.json().catch(() => ({}))
+            if (!response.ok || data.ok === false) throw new Error(data.error || 'HTTP ' + response.status)
+            setDir(data.dir || '')
+            setEntries(data.entries || [])
+          } catch (err) {
+            setError(String((err && err.message) || err))
+            setEntries([])
+          }
+        },
+        [wsId],
+      )
+
+      useEffect(() => {
+        load(initialDir || '')
+      }, [])
+
+      useEffect(() => {
+        const onKey = (event) => {
+          if (event.key === 'Escape') onClose()
+        }
+        window.addEventListener('keydown', onKey)
+        return () => window.removeEventListener('keydown', onKey)
+      }, [])
+
+      const crumbs = splitPath(dir)
+      const childPath = (name) => (dir ? dir + '/' + name : name)
+      const queryText = query.trim().toLowerCase()
+      const visible = (entries || []).filter((entry) => {
+        if (entry.kind === 'file' && resumeOnly && !entry.resume) return false
+        return queryText === '' || entry.name.toLowerCase().includes(queryText)
+      })
+      const folderCount = visible.filter((entry) => entry.kind === 'dir').length
+      const fileCount = visible.length - folderCount
+      const choose = (path) => {
+        if (busy || path === '') return
+        onPick(path)
+      }
+
+      return h(
+        'div',
+        { className: 'olp-card olp-pickpage', ref: anchorRef },
+        h(
+          'div',
+          { className: 'olp-pick-head' },
+          h(
+            'div',
+            null,
+            h('h2', { className: 'olp-pick-title' }, '选择简历文件'),
+            h('p', { className: 'olp-hint' }, '给版本 ' + versionLabel + ' 指定一份简历；保存后助手会先读这份文件，再按你的修改点改。'),
+          ),
+          h('button', { className: 'olp-btn', onClick: onClose }, '取消'),
+        ),
+        h(
+          'div',
+          { className: 'olp-pick-toolbar' },
+          h(
+            'div',
+            { className: 'olp-pick-crumbs' },
+            h('button', { className: 'olp-pick-crumb' + (crumbs.length === 0 ? ' last' : ''), title: workspace ? workspace.path : '', onClick: () => load('') }, '数据目录'),
+            crumbs.map((segment, index) =>
+              h(
+                'span',
+                { key: 'crumb-' + index, className: 'olp-pick-crumb-wrap' },
+                h('span', { className: 'olp-pick-sep' }, '›'),
+                h('button', { className: 'olp-pick-crumb' + (index === crumbs.length - 1 ? ' last' : ''), onClick: () => load(crumbs.slice(0, index + 1).join('/')) }, segment),
+              ),
+            ),
+          ),
+          h('input', { className: 'olp-pick-search', placeholder: '搜索当前文件夹…', value: query, onChange: (e) => setQuery(e.target.value) }),
+        ),
+        h(
+          'div',
+          { className: 'olp-pick-meta' },
+          h('label', { className: 'olp-check' }, h('input', { type: 'checkbox', checked: resumeOnly, onChange: (e) => setResumeOnly(e.target.checked) }), '只看简历类文件'),
+          h('span', { className: 'olp-hint' }, folderCount + ' 个文件夹 · ' + fileCount + ' 个文件'),
+        ),
+        error ? h('div', { className: 'olp-error', style: { padding: '8px 12px', fontSize: '12.5px' } }, error) : null,
+        h(
+          'div',
+          { className: 'olp-pick-list' },
+          entries === null ? h('div', { className: 'olp-pick-empty' }, '读取中…') : null,
+          entries !== null && visible.length === 0
+            ? h('div', { className: 'olp-pick-empty' }, queryText !== '' ? '没有匹配「' + query + '」的文件。' : resumeOnly ? '这个文件夹里没有简历类文件；可以取消「只看简历类文件」再找。' : '这个文件夹是空的。')
+            : null,
+          visible.map((entry) => {
+            const path = childPath(entry.name)
+            const isDir = entry.kind === 'dir'
+            const ext = !isDir && entry.name.includes('.') ? entry.name.slice(entry.name.lastIndexOf('.') + 1).toUpperCase() : ''
+            return h(
+              'button',
+              {
+                key: entry.kind + ':' + entry.name,
+                type: 'button',
+                title: entry.name,
+                className: 'olp-pick-row' + (selected === path ? ' on' : ''),
+                onClick: () => (isDir ? load(path) : setSelected(path)),
+                onDoubleClick: () => (isDir ? load(path) : choose(path)),
+              },
+              h('span', { className: 'olp-pick-ico' }, isDir ? '📁' : '📄'),
+              h('span', { className: 'olp-pick-name' }, entry.name),
+              ext !== '' ? h('span', { className: 'olp-pick-tag' }, ext) : null,
+              selected === path ? h('span', { className: 'olp-pick-tag on' }, '已选') : null,
+            )
+          }),
+        ),
+        h(
+          'div',
+          { className: 'olp-pick-foot' },
+          h('div', { className: 'olp-pick-sel' + (selected === '' ? '' : ' set'), title: selected }, selected === '' ? '点文件名选中，双击直接确定' : '已选：' + selected),
+          h('button', { className: 'olp-btn', onClick: onClose }, '取消'),
+          h('button', { className: 'olp-btn pri', disabled: busy || selected === '', onClick: () => choose(selected) }, '用这份简历'),
+        ),
+      )
+    }
+
     function ResumePage(props) {
-      const { state, run, busy, openChat } = props
+      const { state, run, busy, openChat, workspace } = props
       const [title, setTitle] = useState('')
       const [parentId, setParentId] = useState('')
       const [targetJobId, setTargetJobId] = useState('')
+      const [picking, setPicking] = useState('')
+      const [creating, setCreating] = useState(false)
       async function add() {
         if (title.trim() === '') return
-        await run('resume.add', { title: title.trim(), parentId, targetJobId })
-        setTitle('')
+        const ok = await run('resume.add', { title: title.trim(), parentId, targetJobId })
+        if (ok !== false) {
+          setTitle('')
+          setCreating(false)
+        }
       }
       const jobTitle = (id) => {
         const job = state.jobs.find((item) => item.id === id)
@@ -381,49 +613,87 @@ window.__ModuleLoader__.load({
         version.id +
         '（' +
         version.title +
-        '）。先 offerloop_read 读取目标岗位与该版本现状；然后等我说修改点，按我说的改，不要自己补造经历或数字。写完用 offerloop_write，action=resume.update，payload={"id":"' +
+        '）' +
+        (version.file ? '，简历文件是「' + version.file + '」（相对数据目录）' : '') +
+        '。先 offerloop_read 读取目标岗位与该版本现状' +
+        (version.file ? '，并读这份简历文件' : '') +
+        '；然后等我说修改点，按我说的改，不要自己补造经历或数字。写完用 offerloop_write，action=resume.update，payload={"id":"' +
         version.id +
         '","sections":[{"heading":"…","bullets":[{"text":"…"}]}],"diffSummary":["…"]} 保存。'
+      const filePrompt = (version) =>
+        '我的简历文件是「' +
+        version.file +
+        '」（相对数据目录）。请先读这份文件，结合目标岗位 JD 和版本「' +
+        version.title +
+        '」给我修改点建议；不要自己补造经历或数字，等我确认后再改。'
+
+      const pickingVersion = picking ? state.resumes.find((version) => version.id === picking) : null
+      if (pickingVersion) {
+        return h(FilePicker, {
+          workspace,
+          version: pickingVersion,
+          initialDir: dirNameOf(pickingVersion.file),
+          busy,
+          onClose: () => setPicking(''),
+          onPick: async (file) => {
+            const ok = await run('resume.update', { id: pickingVersion.id, file })
+            if (ok !== false) setPicking('')
+          },
+        })
+      }
 
       return h(
         'div',
         null,
-        h(
-          'div',
-          { className: 'olp-card', style: { marginBottom: '14px' } },
-          h('p', { className: 'olp-sec-title' }, '新建简历版本'),
-          h(
-            'div',
-            { className: 'olp-form' },
-            h(Field, { label: '版本标题' }, h('input', { className: 'olp-in', value: title, placeholder: '如：某 AI 产品经理 定制版', onChange: (e) => setTitle(e.target.value) })),
-            h(
-              Field,
-              { label: '父版本' },
-              h(
-                'select',
-                { className: 'olp-sel', value: parentId, onChange: (e) => setParentId(e.target.value) },
-                h('option', { value: '' }, '无（新基线）'),
-                state.resumes.map((version) => h('option', { key: version.id, value: version.id }, version.title + ' · ' + version.id)),
-              ),
-            ),
-            h(
-              Field,
-              { label: '目标岗位' },
-              h(
-                'select',
-                { className: 'olp-sel', value: targetJobId, onChange: (e) => setTargetJobId(e.target.value) },
-                h('option', { value: '' }, '未绑定'),
-                state.jobs.map((job) => h('option', { key: job.id, value: job.id }, job.title + (job.company ? ' @ ' + job.company : ''))),
-              ),
-            ),
-            h(
+        creating
+          ? h(
               'div',
-              { className: 'olp-row', style: { gridColumn: '1/-1' } },
-              h('button', { className: 'olp-btn pri', onClick: add, disabled: busy || title.trim() === '' }, '创建版本'),
-              h('button', { className: 'olp-btn', onClick: () => openChat('我要改简历。请先 offerloop_read 读取目标岗位和当前简历版本，然后等我说修改点；不要自己补造经历或数字。') }, '用对话改简历'),
+              { className: 'olp-card', style: { marginBottom: '14px' } },
+              h(
+                'div',
+                { className: 'olp-row', style: { justifyContent: 'space-between' } },
+                h('p', { className: 'olp-sec-title', style: { margin: 0 } }, '新建简历版本'),
+                h('button', { className: 'olp-btn quiet', onClick: () => setCreating(false) }, '取消'),
+              ),
+              h(
+                'div',
+                { className: 'olp-form', style: { marginTop: '10px', marginBottom: '10px' } },
+                h(Field, { label: '版本标题' }, h('input', { className: 'olp-in', value: title, placeholder: '如：某 AI 产品经理 定制版', onChange: (e) => setTitle(e.target.value) })),
+                h(
+                  Field,
+                  { label: '父版本' },
+                  h(
+                    'select',
+                    { className: 'olp-sel', value: parentId, onChange: (e) => setParentId(e.target.value) },
+                    h('option', { value: '' }, '无（新基线）'),
+                    state.resumes.map((version) => h('option', { key: version.id, value: version.id }, version.title + ' · ' + version.id)),
+                  ),
+                ),
+                h(
+                  Field,
+                  { label: '目标岗位' },
+                  h(
+                    'select',
+                    { className: 'olp-sel', value: targetJobId, onChange: (e) => setTargetJobId(e.target.value) },
+                    h('option', { value: '' }, '未绑定'),
+                    state.jobs.map((job) => h('option', { key: job.id, value: job.id }, job.title + (job.company ? ' @ ' + job.company : ''))),
+                  ),
+                ),
+                h(
+                  'div',
+                  { className: 'olp-row', style: { gridColumn: '1/-1' } },
+                  h('button', { className: 'olp-btn pri', onClick: add, disabled: busy || title.trim() === '' }, '创建版本'),
+                  h('button', { className: 'olp-btn', onClick: () => openChat('我要改简历。请先 offerloop_read 读取目标岗位和当前简历版本，然后等我说修改点；不要自己补造经历或数字。') }, '用对话改简历'),
+                ),
+              ),
+              h('p', { className: 'olp-hint' }, '创建后可在版本卡片里指定简历文件；指定后助手会先读那份文件再改。'),
+            )
+          : h(
+              'div',
+              { className: 'olp-row', style: { marginBottom: '14px' } },
+              h('button', { className: 'olp-btn', onClick: () => setCreating(true) }, '＋ 新建简历版本'),
+              h('span', { className: 'olp-hint' }, state.resumes.length === 0 ? '还没有版本；先建一个基线，再指定简历文件。' : '按目标岗位分叉；每个版本各指一份简历文件。'),
             ),
-          ),
-        ),
         state.resumes.length === 0
           ? h('div', { className: 'olp-empty' }, '还没有简历版本。')
           : h(
@@ -443,6 +713,19 @@ window.__ModuleLoader__.load({
                     h('span', null, (version.sections || []).length + ' 个段落'),
                     diff ? h('span', null, '相对父版本：+' + diff.added + ' / −' + diff.removed) : null,
                   ),
+                  h(
+                    'div',
+                    { className: 'olp-file' },
+                    h('span', null, '简历文件：'),
+                    version.file ? h('b', { className: 'olp-file-name', title: version.file }, baseNameOf(version.file)) : h('span', null, '未指定'),
+                    version.file && dirNameOf(version.file) !== '' ? h('span', { className: 'olp-hint' }, '· ' + dirNameOf(version.file) + '/') : null,
+                    h('button', { className: 'olp-btn', onClick: () => setPicking(version.id) }, version.file ? '更换' : '选择文件'),
+                    version.file ? h('button', { className: 'olp-btn quiet', onClick: () => run('resume.update', { id: version.id, file: '' }), disabled: busy }, '清除') : null,
+                    version.file
+                      ? h('button', { className: 'olp-btn quiet', style: { marginLeft: 'auto' }, onClick: () => openChat(filePrompt(version)) }, '让助手读这份文件')
+                      : null,
+                  ),
+                  version.file ? null : h('p', { className: 'olp-hint' }, '点「选择文件」会在面板里打开数据目录的文件列表；有多份简历时先指定用哪一份，不指定时助手只维护结构化简历。'),
                   (version.diffSummary || []).length > 0 ? h('p', null, (version.diffSummary || []).join('\n')) : null,
                   (version.sections || []).length === 0
                     ? h('p', { className: 'olp-hint' }, '还没有段落。点「用对话更新」，把修改点直接说给助手。')
@@ -484,6 +767,7 @@ window.__ModuleLoader__.load({
           : '目标岗位：先用 offerloop_read 读 target；如果为空，问我岗位再继续。',
         target && target.jd ? 'JD 要点：' + String(target.jd).slice(0, 1200) : '',
         version ? '简历版本：' + version.id + '（' + version.title + '）。' : '',
+        version && version.file ? '简历文件：' + version.file + '（相对数据目录）；出题前先读这份文件。' : '',
         '步骤：1) 先 offerloop_read 读取目标岗位与该简历版本；2) 随机生成 5 个问题（业务 2、专业 2、动机/HR 1，顺序打乱，避开最近一次模拟的题）；3) 一次只问一个，我回答后追问 1 层；4) 每题记录：问题、我的回答、档位 A/B/C/D、维度（需求判断/优先级/指标口径/推进/复盘/表达）、一句点评；5) 全部结束后给总体：一句话结论、3 条优势、3 个待补；6) 用 offerloop_write，action=interview.add，mode=mock，round="' + roundType + '"，把 questions 与 overall 一并保存。',
       ]
       return lines.filter(Boolean).join('\n')
@@ -509,7 +793,7 @@ window.__ModuleLoader__.load({
             'div',
             { className: 'olp-ctx' },
             h('span', null, '目标岗位：' + (target ? target.title + (target.company ? ' @ ' + target.company : '') : '未设置')),
-            h('span', null, '简历：' + (current ? current.title + ' · ' + current.id : '无')),
+            h('span', null, '简历：' + (current ? current.title + ' · ' + current.id : '无') + (current && current.file ? ' · 文件 ' + baseNameOf(current.file) : '')),
           ),
           h(
             'div',
@@ -715,6 +999,7 @@ window.__ModuleLoader__.load({
       const [tab, setTab] = useState('today')
       const [busy, setBusy] = useState(false)
       const [notice, setNotice] = useState(null)
+      const [targetOpen, setTargetOpen] = useState(false)
 
       const refresh = useCallback(async function refresh(wsId) {
         try {
@@ -754,8 +1039,10 @@ window.__ModuleLoader__.load({
           const data = await response.json().catch(() => ({}))
           if (!response.ok || data.ok === false) throw new Error(data.error || 'HTTP ' + response.status)
           setBoot((prev) => ({ ...prev, workspaces: data.workspaces || prev.workspaces, ws: data.ws || prev.ws, workspace: data.workspace || prev.workspace, state: data.state || prev.state }))
+          return true
         } catch (error) {
           setNotice({ kind: 'err', text: '保存失败：' + String((error && error.message) || error) })
+          return false
         } finally {
           setBusy(false)
         }
@@ -785,13 +1072,13 @@ window.__ModuleLoader__.load({
             { className: 'olp-error' },
             h('b', null, '读不到求职台数据'),
             h('span', null, boot.error),
-            h('span', { className: 'olp-hint' }, '如果是刚安装插件，请刷新页面；如果持续失败，检查 workspace 是否打开。'),
+            h('span', { className: 'olp-hint' }, '如果是刚安装插件，请刷新页面；如果持续失败，确认数据目录（workspace）还在，并在顶栏切一下目录。'),
             h('button', { className: 'olp-btn', onClick: () => { setBoot((prev) => ({ ...prev, loading: true })); refresh(boot.ws || undefined) } }, '重试'),
           ),
         )
       }
       if (!boot.state) {
-        return h('div', { className: 'olp-wrap' }, h('div', { className: 'olp-empty' }, '没有可用的 workspace。请先在侧边栏打开一个工作区，再回到求职台。'))
+        return h('div', { className: 'olp-wrap' }, h('div', { className: 'olp-empty' }, '还没有可用的数据目录。先在侧边栏打开一个文件夹作为工作区，再回到求职台；求职数据会写进那个文件夹的 .offerloop.json。'))
       }
 
       const state = boot.state
@@ -816,40 +1103,53 @@ window.__ModuleLoader__.load({
             'div',
             { className: 'olp-head-actions' },
             h(
-              'select',
-              {
-                className: 'olp-sel',
-                style: { width: 'auto', maxWidth: '240px' },
-                value: boot.ws,
-                onChange: (e) => {
-                  const next = e.target.value
-                  setBoot((prev) => ({ ...prev, ws: next }))
-                  refresh(next)
+              'label',
+              { className: 'olp-dirlabel', htmlFor: 'olp-dir-select', title: '求职数据（.offerloop.json）保存在这个文件夹；换一个就是换一套数据。' },
+              h('span', null, '数据目录'),
+              h(
+                'select',
+                {
+                  id: 'olp-dir-select',
+                  className: 'olp-sel',
+                  style: { width: 'auto', maxWidth: '240px' },
+                  value: boot.ws,
+                  onChange: (e) => {
+                    const next = e.target.value
+                    setBoot((prev) => ({ ...prev, ws: next }))
+                    refresh(next)
+                  },
+                  'aria-label': '数据目录（求职数据存放的文件夹）',
                 },
-                title: '切换 workspace',
-              },
-              boot.workspaces.map((workspace) => h('option', { key: workspace.id, value: workspace.id }, workspace.title)),
+                boot.workspaces.map((workspace) => h('option', { key: workspace.id, value: workspace.id, title: workspace.path }, workspace.title)),
+              ),
             ),
-            h('button', { className: 'olp-btn', onClick: () => refresh(boot.ws) }, '刷新'),
-            h('button', { className: 'olp-btn pri', onClick: () => openChat('我要改简历。请先 offerloop_read 读取目标岗位和当前简历版本，然后等我说修改点；不要自己补造经历或数字。') }, '用对话改简历'),
+            h('button', { className: 'olp-btn quiet', onClick: () => refresh(boot.ws) }, '刷新'),
           ),
         ),
-        notice ? h('div', { className: 'olp-notice ' + (notice.kind === 'err' ? 'err' : 'ok') }, notice.text) : null,
-        h(TargetCard, {
-          target: state.target,
-          busy,
-          onSave: (payload) => run('target.set', payload),
-          onClear: () => run('target.clear', {}),
-          onOpenChat: openChat,
-        }),
         h(
           'div',
-          { className: 'olp-tabs' },
-          tabs.map((item) => h('button', { key: item.id, className: 'olp-tab' + (tab === item.id ? ' on' : ''), onClick: () => setTab(item.id) }, item.label)),
+          { className: 'olp-tabrow' },
+          h(
+            'div',
+            { className: 'olp-tabs' },
+            tabs.map((item) => h('button', { key: item.id, className: 'olp-tab' + (tab === item.id ? ' on' : ''), onClick: () => setTab(item.id) }, item.label)),
+          ),
+          h(TargetChip, { target: state.target, open: targetOpen, onToggle: () => setTargetOpen((prev) => !prev) }),
         ),
+        targetOpen
+          ? h(TargetEditor, {
+              target: state.target,
+              busy,
+              onSave: (payload) => run('target.set', payload),
+              onClear: () => run('target.clear', {}),
+              onOpenChat: openChat,
+              onClose: () => setTargetOpen(false),
+            })
+          : null,
+        notice ? h('div', { className: 'olp-notice ' + (notice.kind === 'err' ? 'err' : 'ok') }, notice.text) : null,
         tab === 'today' ? h(TodayPage, { state, run, busy, openChat, workspace: boot.workspace, go }) : null,
         tab === 'jobs' ? h(JobsPage, { state, run, busy, openChat }) : null,
-        tab === 'resume' ? h(ResumePage, { state, run, busy, openChat }) : null,
+        tab === 'resume' ? h(ResumePage, { state, run, busy, openChat, workspace: boot.workspace }) : null,
         tab === 'mock' ? h(MockPage, { state, run, busy, openChat }) : null,
         tab === 'review' ? h(ReviewPage, { state, run, busy, openChat }) : null,
         h('p', { className: 'olp-hint', style: { marginTop: '18px' } }, '数据文件：' + (boot.workspace ? boot.workspace.path : '') + '\\.offerloop.json · 修订 ' + String(state.rev || 0)),

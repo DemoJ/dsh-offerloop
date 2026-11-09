@@ -1,6 +1,6 @@
 {
   "name": "dsh-offerloop",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "private": true,
   "type": "module",
   "description": "OfferLoop 求职台：目标 JD → 简历版本 → 模拟面试（随机出题 + 打分）→ 复盘。DeepSeek Harness 持久化插件。",
