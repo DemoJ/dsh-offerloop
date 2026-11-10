@@ -1048,12 +1048,47 @@ window.__ModuleLoader__.load({
         }
       }
 
-      function openChat(prompt) {
+      async function listAgentIds() {
+        try {
+          const response = await fetch('/offerloop/api/agents', { headers: { accept: 'application/json' } })
+          const data = await response.json().catch(() => ({}))
+          return Array.isArray(data.ids) ? data.ids : []
+        } catch (error) {
+          return []
+        }
+      }
+
+      function claimSession(sessionId) {
+        return fetch('/offerloop/api/session', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', accept: 'application/json' },
+          body: JSON.stringify({ ws: boot.ws || '', sessionId }),
+        }).catch(() => undefined)
+      }
+
+      // The Host only gives the job-search persona to sessions claimed here, so
+      // every session started from the panel is the one that owns it.
+      async function claimNewSession(before) {
+        const known = new Set(before)
+        for (let attempt = 0; attempt < 40; attempt += 1) {
+          const ids = await listAgentIds()
+          const fresh = ids.filter((id) => !known.has(id))
+          if (fresh.length > 0) {
+            await claimSession(fresh[fresh.length - 1])
+            return
+          }
+          await new Promise((resolve) => setTimeout(resolve, 100))
+        }
+      }
+
+      async function openChat(prompt) {
         try {
           if (ctx.uiWorkspace && typeof ctx.uiWorkspace.startSession === 'function') {
+            const before = await listAgentIds()
             ctx.uiWorkspace.startSession(boot.ws || undefined, { prompt, whenDraftExists: 'replace' })
             if (ctx.layout && typeof ctx.layout.selectPanel === 'function') ctx.layout.selectPanel(null)
             setNotice({ kind: 'ok', text: '已打开新会话并预填了提示词，按回车发送。' })
+            claimNewSession(before)
           } else {
             setNotice({ kind: 'err', text: '当前版本不支持从面板打开会话，请在侧边栏新建会话。' })
           }

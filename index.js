@@ -514,6 +514,32 @@ function readBody(req) {
   })
 }
 
+// Sessions claimed by the panel, keyed so the persona can be attributed to one
+// workspace. Kept in memory on purpose: the panel re-claims its session on every
+// open, so a restart simply starts clean instead of resurrecting a stale id.
+const offerloopSessionIds = new Set()
+const offerloopSessionByWorkspace = new Map()
+
+function agentIds(ctx) {
+  const service = typeof ctx.get === 'function' ? ctx.get('agents') : undefined
+  if (!service) return []
+  // roots() keeps top-level agents only; fall back to list() on older builds.
+  const source = typeof service.roots === 'function' ? service.roots() : typeof service.list === 'function' ? service.list() : []
+  if (!Array.isArray(source)) return []
+  return source.map((agent) => (agent && typeof agent.id === 'string' ? agent.id : null)).filter((id) => id !== null)
+}
+
+function claimSession(ctx, workspaceId, sessionId) {
+  const previous = offerloopSessionByWorkspace.get(workspaceId)
+  if (previous !== undefined && previous !== sessionId) offerloopSessionIds.delete(previous)
+  if (sessionId) {
+    offerloopSessionIds.add(sessionId)
+    offerloopSessionByWorkspace.set(workspaceId, sessionId)
+  } else {
+    offerloopSessionByWorkspace.delete(workspaceId)
+  }
+}
+
 function createHandler(ctx) {
   return async function handler(req, res) {
     try {
@@ -528,6 +554,23 @@ function createHandler(ctx) {
 
       if (method === 'GET' && (path === '/' || path === '/ping')) {
         sendJson(res, 200, { ok: true, plugin: 'offerloop' })
+        return
+      }
+      if (method === 'GET' && path === '/agents') {
+        sendJson(res, 200, { ok: true, ids: agentIds(ctx), claimed: [...offerloopSessionIds] })
+        return
+      }
+      if (method === 'POST' && path === '/session') {
+        const raw = await readBody(req)
+        const body = raw.trim().length > 0 ? JSON.parse(raw) : {}
+        const workspace = pickWorkspace(ctx, body.ws)
+        if (workspace === null) {
+          sendJson(res, 200, { ok: true, sessionId: null })
+          return
+        }
+        const sessionId = typeof body.sessionId === 'string' && body.sessionId.length > 0 ? body.sessionId : ''
+        claimSession(ctx, workspace.id, sessionId)
+        sendJson(res, 200, { ok: true, sessionId: sessionId || null })
         return
       }
       if (method === 'GET' && path === '/bootstrap') {
@@ -693,7 +736,15 @@ export function apply(ctx) {
     ctx.systemPrompt.section({
       name: 'offerloop',
       order: 60,
-      text: PROMPT_SECTION,
+      // Only sessions claimed by the panel get the job-search persona. The panel
+      // registers the session it opens through POST /offerloop/api/session, so
+      // every other session stays clean. Claiming is per workspace, and the set
+      // is rebuilt whenever the panel opens a session.
+      text: (assembly) => {
+        const agentId = assembly && assembly.agent && assembly.agent.id
+        if (typeof agentId !== 'string' || !offerloopSessionIds.has(agentId)) return ''
+        return PROMPT_SECTION
+      },
     }),
   )
 }
